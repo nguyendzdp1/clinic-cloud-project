@@ -21,4 +21,5 @@ urlpatterns = [
     path('doctor/dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
     path('redirect/', views.post_login_redirect, name='post_login_redirect'), # <-- Đường dẫn điều hướng
     path('dat-lich/<int:pk>/', views.dat_lich, name='dat_lich'), # <int:pk> là ID của bác sĩ
+    path('duyet-lich/<int:pk>/<str:trang_thai>/', views.duyet_lich, name='duyet_lich'),
 ]

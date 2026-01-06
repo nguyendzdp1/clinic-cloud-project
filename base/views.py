@@ -7,6 +7,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import BacSi, LichHen
 
 # Cấu hình AI
 try:
@@ -77,14 +80,46 @@ def register(request):
     return render(request, 'base/register.html', {'form': form})
 
 
+
 @login_required
 def doctor_dashboard(request):
-    # Kiểm tra xem user này có phải bác sĩ không
-    if hasattr(request.user, 'bacsi'): 
-        return render(request, 'base/doctor_dashboard.html')
-    else:
-        # Nếu khách hàng cố tình vào trang này -> đá về trang chủ
+    # 1. Kiểm tra có phải bác sĩ không
+    if not hasattr(request.user, 'bacsi'):
         return redirect('home')
+    
+    bac_si = request.user.bacsi # Lấy thông tin bác sĩ đang đăng nhập
+    
+    # 2. Lấy danh sách lịch hẹn CỦA RIÊNG BÁC SĨ ĐÓ
+    # Sắp xếp lịch mới nhất lên đầu (-ngay_tao)
+    ds_lich_hen = LichHen.objects.filter(bac_si=bac_si).order_by('-ngay_gio')
+    
+    context = {
+        'bac_si': bac_si,
+        'ds_lich_hen': ds_lich_hen
+    }
+    return render(request, 'base/doctor_dashboard.html', context)
+
+# --- Hàm mới: Xử lý nút Duyệt/Hủy ---
+@login_required
+def duyet_lich(request, pk, trang_thai):
+    # Lấy lịch hẹn theo ID
+    lich_hen = get_object_or_404(LichHen, pk=pk)
+    
+    # Bảo mật: Chỉ bác sĩ phụ trách mới được duyệt
+    if not hasattr(request.user, 'bacsi') or lich_hen.bac_si != request.user.bacsi:
+        messages.error(request, "Bạn không có quyền duyệt lịch này!")
+        return redirect('doctor_dashboard')
+
+    # Cập nhật trạng thái
+    if trang_thai == 'duyet':
+        lich_hen.trang_thai = 'DA_DUYET'
+        messages.success(request, f"Đã duyệt lịch khám cho {lich_hen.benh_nhan.username}")
+    elif trang_thai == 'huy':
+        lich_hen.trang_thai = 'HUY'
+        messages.warning(request, "Đã hủy lịch khám.")
+        
+    lich_hen.save()
+    return redirect('doctor_dashboard')
     
     
 @login_required
