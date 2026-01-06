@@ -118,4 +118,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Thay dòng chữ trong ngoặc kép bằng mã Key bạn vừa copy
-GOOGLE_API_KEY = "chèn_key_của_bạn_vào_đây"
+GOOGLE_API_KEY = "AIzaSyAc6MeCQaAE7KmS-tDbbRJzyOypfkFqy6o"
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'post_login_redirect'

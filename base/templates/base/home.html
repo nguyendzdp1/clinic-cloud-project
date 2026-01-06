@@ -1,4 +1,4 @@
-{% load static %}
+{% comment %} {% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -122,6 +122,104 @@
     <a href="{% url 'chat_ai' %}" class="btn btn-primary rounded-circle p-3 chat-float-btn btn-lg">
         <i class="bi bi-chat-dots-fill fs-4"></i>
     </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> {% endcomment %}
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Cloud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        /* CSS cho form đăng nhập đẹp hơn */
+        input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        label { font-weight: bold; margin-bottom: 5px; display: block;}
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover; background-position: center; color: white; padding: 100px 0; border-radius: 0 0 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'home' %}"><i class="bi bi-hospital-fill"></i> CLINIC CLOUD</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Trang chủ</a></li>
+                    
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item ms-3">
+                            <span class="fw-bold text-dark">Xin chào, {{ request.user.username }}</span>
+                        </li>
+                        <li class="nav-item ms-2">
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Đăng xuất</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-3"><a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Đăng nhập</a></li>
+                        <li class="nav-item ms-2"><a href="{% url 'register' %}" class="btn btn-primary btn-sm">Đăng ký</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}
+        
+        <header class="hero-section text-center mb-5">
+            <div class="container">
+                <h1 class="display-4 fw-bold">Chăm sóc sức khỏe 4.0</h1>
+                <p class="lead mb-4">Kết nối chuyên gia & AI tư vấn sức khỏe.</p>
+                <a href="{% url 'chat_ai' %}" class="btn btn-primary btn-lg px-4 me-2"><i class="bi bi-robot"></i> Chat AI</a>
+            </div>
+        </header>
+
+        <div class="container mb-5">
+            <h3 class="fw-bold border-start border-4 border-primary ps-3 mb-4">Đội ngũ Bác sĩ</h3>
+            <div class="row g-4">
+                {% for bs in ds_bac_si %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm">
+                        {% if bs.anh_dai_dien %}
+                            <img src="{{ bs.anh_dai_dien.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/200" class="card-img-top">
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h5 class="fw-bold">{{ bs.user.last_name }} {{ bs.user.first_name }}</h5>
+                            <p class="text-muted">{{ bs.chuyen_khoa }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted">Chưa có bác sĩ nào.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% endblock %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

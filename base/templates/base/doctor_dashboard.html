@@ -1,0 +1,17 @@
+{% extends 'base/home.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="alert alert-info">
+        <h4>👋 Chào bác sĩ, {{ request.user.last_name }}</h4>
+        <p>Đây là khu vực quản lý bệnh nhân của bạn.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">Danh sách lịch hẹn hôm nay</div>
+        <div class="card-body">
+            <p>Chưa có lịch hẹn nào (Tính năng đang phát triển).</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
