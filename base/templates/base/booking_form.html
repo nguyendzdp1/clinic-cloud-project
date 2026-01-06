@@ -1,0 +1,45 @@
+{% extends 'base/home.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">📅 Đặt lịch khám</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-4 p-3 bg-light rounded">
+                        {% if bac_si.anh_dai_dien %}
+                            <img src="{{ bac_si.anh_dai_dien.url }}" class="rounded-circle me-3" width="60" height="60" style="object-fit: cover;">
+                        {% endif %}
+                        <div>
+                            <h5 class="fw-bold mb-0">BS. {{ bac_si.user.last_name }} {{ bac_si.user.first_name }}</h5>
+                            <small class="text-muted">{{ bac_si.chuyen_khoa }}</small>
+                        </div>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Chọn ngày giờ khám:</label>
+                            <input type="datetime-local" name="ngay_gio" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Triệu chứng / Lý do khám:</label>
+                            <textarea name="trieu_chung" class="form-control" rows="4" placeholder="Ví dụ: Đau đầu, sốt nhẹ 2 ngày nay..." required></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Xác nhận đặt lịch</button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">Hủy bỏ</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

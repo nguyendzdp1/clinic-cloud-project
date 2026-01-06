@@ -1,0 +1,21 @@
+{% extends 'base/home.html' %} {% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>Đăng Nhập</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Đăng nhập</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small>Chưa có tài khoản? <a href="{% url 'register' %}">Đăng ký ngay</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
