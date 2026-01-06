@@ -2,7 +2,7 @@ import google.generativeai as genai
 import os
 
 # 1. Điền trực tiếp Key của bạn vào đây để test (thay thế dòng trong ngoặc)
-MY_API_KEY = "AIzaSyAc6MeCQaAE7KmS-tDbbRJzyOypfkFqy6o"  
+MY_API_KEY = ""  
 genai.configure(api_key=MY_API_KEY)
 
 print("Dang ket noi voi Google AI...")
